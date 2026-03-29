@@ -1,86 +1,78 @@
 import { motion } from 'motion/react';
-import { ChevronRight, Wrench, Zap, Truck } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { HelpCircle, ChevronDown } from 'lucide-react';
+import { useState } from 'react';
 
-export default function Home() {
+const faqs = [
+  {
+    question: "¿Tienen local a la calle?",
+    answer: "¡Sí! Estamos ubicados en Manzana de las luces 475, Bahía Blanca, Buenos Aires. Vení a visitarnos, conocer nuestro stock y recibir asesoramiento personalizado de nuestro equipo."
+  },
+  {
+    question: "¿Qué tipo de repuestos trabajan?",
+    answer: "Trabajamos una amplísima variedad de repuestos. Desde componentes estándar para el mantenimiento diario de tu moto, hasta piezas de competición (high-performance) para sacarle el máximo rendimiento. Y recordá: si no lo tenemos en stock, ¡te lo traemos!"
+  },
+  {
+    question: "¿Hacen envíos a todo el país?",
+    answer: "Sí, realizamos envíos a toda Argentina. Además, si tu compra supera los $50.000, ¡el envío es totalmente GRATIS!"
+  },
+  {
+    question: "¿Cuáles son los métodos de pago?",
+    answer: "Aceptamos múltiples formas de pago: efectivo en nuestro local, transferencias bancarias, tarjetas de débito y crédito. Consultá por promociones vigentes al momento de tu compra."
+  },
+  {
+    question: "¿Puedo devolver un producto eléctrico?",
+    answer: "No. Como indicamos en nuestras políticas, los productos eléctricos y electrónicos no tienen cambio ni devolución, ya que son testeados de fábrica para asegurar su funcionamiento antes de la venta."
+  }
+];
+
+export default function FAQ() {
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
+
   return (
-    <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden min-h-screen flex flex-col justify-center">
-      {/* Background Effects */}
-      <div className="absolute inset-0 bg-carbon opacity-40"></div>
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#FF4500]/20 rounded-full blur-[120px] pointer-events-none"></div>
-      
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div className="max-w-3xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <h1 className="font-display font-black italic text-5xl sm:text-7xl lg:text-8xl leading-[0.85] tracking-tighter mb-6 uppercase">
-              El repuesto <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF4500] to-[#D20000]">
-                exacto
-              </span> <br />
-              para tu moto
-            </h1>
-          </motion.div>
-
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-xl text-gray-400 mb-10 max-w-xl font-medium"
-          >
-            Repuestos estándar y de competición en Bahía Blanca. En solo 8 meses crecimos para ofrecerte la mayor variedad. Y si no lo tenemos, ¡te lo traemos!
-          </motion.p>
-
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="flex flex-col sm:flex-row gap-4"
-          >
-            <Link 
-              to="/catalogo"
-              onClick={() => {
-                try {
-                  if (typeof (window as any).gtag === 'function') (window as any).gtag('event', 'ViewCatalog');
-                  if (typeof (window as any).fbq === 'function') (window as any).fbq('trackCustom', 'ViewCatalog');
-                } catch (e) {}
-              }}
-              className="group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white uppercase tracking-widest bg-gradient-to-r from-[#FF4500] to-[#D20000] skew-x-12 overflow-hidden neon-shadow transition-all"
-            >
-              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
-              <span className="unskew-x-12 flex items-center gap-2 relative z-10">
-                Ver Catálogo
-                <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </span>
-            </Link>
-          </motion.div>
+    <div className="pt-32 pb-24 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 min-h-screen">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-center mb-16"
+      >
+        <div className="w-16 h-16 bg-[#FF4500]/10 rounded-full flex items-center justify-center mx-auto mb-6">
+          <HelpCircle className="w-8 h-8 text-[#FF4500]" />
         </div>
+        <h1 className="font-display font-black italic text-4xl sm:text-5xl uppercase mb-4">
+          Preguntas <span className="text-[#FF4500]">Frecuentes</span>
+        </h1>
+        <p className="text-gray-400">Resolvemos tus dudas a la velocidad de la pista.</p>
+      </motion.div>
 
-        {/* Features Grid */}
-        <motion.div 
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-24"
-        >
-          {[
-            { icon: Zap, title: "Estándar y Competición", desc: "Amplia variedad para el uso diario o para la pista." },
-            { icon: Truck, title: "Si no está, lo traemos", desc: "Conseguimos lo que tu moto necesita en tiempo récord." },
-            { icon: Wrench, title: "Crecimiento Acelerado", desc: "Hace 8 meses abrimos y ya somos tu parada obligada." }
-          ].map((feature, idx) => (
-            <div key={idx} className="bg-[#111] border border-[#333] p-6 skew-x-12 hover:border-[#FF4500]/50 transition-colors group hover:-translate-y-2 duration-300">
-              <div className="unskew-x-12">
-                <feature.icon className="w-8 h-8 text-[#FF4500] mb-4 group-hover:scale-110 transition-transform" />
-                <h3 className="font-display font-bold italic text-xl mb-2 uppercase">{feature.title}</h3>
-                <p className="text-gray-400 text-sm">{feature.desc}</p>
-              </div>
+      <div className="space-y-4">
+        {faqs.map((faq, index) => (
+          <motion.div 
+            key={index}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 }}
+            className="bg-[#111] border border-[#333] rounded-xl overflow-hidden"
+          >
+            <button
+              onClick={() => setOpenIndex(openIndex === index ? null : index)}
+              className="w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none"
+            >
+              <span className="font-bold text-lg pr-8">{faq.question}</span>
+              <ChevronDown 
+                className={`w-5 h-5 text-[#FF4500] shrink-0 transition-transform duration-300 ${openIndex === index ? 'rotate-180' : ''}`} 
+              />
+            </button>
+            
+            <div 
+              className={`px-6 overflow-hidden transition-all duration-300 ease-in-out ${openIndex === index ? 'max-h-96 pb-5 opacity-100' : 'max-h-0 opacity-0'}`}
+            >
+              <p className="text-gray-400 border-t border-[#333] pt-4">
+                {faq.answer}
+              </p>
             </div>
-          ))}
-        </motion.div>
+          </motion.div>
+        ))}
       </div>
-    </section>
+    </div>
   );
 }

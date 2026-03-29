@@ -1,105 +1,86 @@
 import { motion } from 'motion/react';
-import { Truck, AlertTriangle, ShieldAlert } from 'lucide-react';
+import { ChevronRight, Wrench, Zap, Truck } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-export default function ShippingReturns() {
+export default function Home() {
   return (
-    <div className="pt-32 pb-24 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 min-h-screen">
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-center mb-16"
-      >
-        <h1 className="font-display font-black italic text-4xl sm:text-5xl uppercase mb-4">
-          Envíos y <span className="text-[#FF4500]">Devoluciones</span>
-        </h1>
-        <p className="text-gray-400">Todo lo que necesitas saber sobre nuestras políticas de entrega y cambios.</p>
-      </motion.div>
+    <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden min-h-screen flex flex-col justify-center">
+      {/* Background Effects */}
+      <div className="absolute inset-0 bg-carbon opacity-40"></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#FF4500]/20 rounded-full blur-[120px] pointer-events-none"></div>
+      
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div className="max-w-3xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <h1 className="font-display font-black italic text-5xl sm:text-7xl lg:text-8xl leading-[0.85] tracking-tighter mb-6 uppercase">
+              El repuesto <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF4500] to-[#D20000]">
+                exacto
+              </span> <br />
+              para tu moto
+            </h1>
+          </motion.div>
 
-      <div className="space-y-12">
-        {/* Envíos */}
-        <motion.section 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="bg-[#111] border border-[#333] p-8 rounded-2xl relative overflow-hidden"
-        >
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#FF4500] to-[#D20000]"></div>
-          <div className="flex items-center gap-4 mb-6">
-            <div className="w-12 h-12 bg-[#FF4500]/10 rounded-full flex items-center justify-center">
-              <Truck className="w-6 h-6 text-[#FF4500]" />
-            </div>
-            <h2 className="font-display font-bold italic text-2xl uppercase">Política de Envíos</h2>
-          </div>
-          <div className="space-y-4 text-gray-300">
-            <p>
-              En Fox Motorepuestos aceleramos a fondo para que tu pedido llegue lo antes posible. Realizamos envíos a todo el país desde nuestra sucursal en <strong>Bahía Blanca</strong>.
-            </p>
-            <div className="bg-[#FF4500]/10 border border-[#FF4500]/30 p-4 rounded-lg flex items-start gap-3">
-              <ZapIcon className="w-6 h-6 text-[#FF4500] shrink-0" />
-              <p className="font-bold text-white">
-                ¡ENVÍO GRATIS a partir de $50.000!
-              </p>
-            </div>
-            <p className="text-sm text-gray-400">
-              * El envío gratuito aplica para compras que superen los $50.000 ARS. Para compras inferiores, el costo del envío se calculará al momento del checkout dependiendo de tu ubicación.
-            </p>
-          </div>
-        </motion.section>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-xl text-gray-400 mb-10 max-w-xl font-medium"
+          >
+            Repuestos estándar y de competición en Bahía Blanca. En solo 8 meses crecimos para ofrecerte la mayor variedad. Y si no lo tenemos, ¡te lo traemos!
+          </motion.p>
 
-        {/* Devoluciones */}
-        <motion.section 
-          initial={{ opacity: 0, y: 20 }}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="flex flex-col sm:flex-row gap-4"
+          >
+            <Link 
+              to="/catalogo"
+              onClick={() => {
+                try {
+                  if (typeof (window as any).gtag === 'function') (window as any).gtag('event', 'ViewCatalog');
+                  if (typeof (window as any).fbq === 'function') (window as any).fbq('trackCustom', 'ViewCatalog');
+                } catch (e) {}
+              }}
+              className="group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white uppercase tracking-widest bg-gradient-to-r from-[#FF4500] to-[#D20000] skew-x-12 overflow-hidden neon-shadow transition-all"
+            >
+              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
+              <span className="unskew-x-12 flex items-center gap-2 relative z-10">
+                Ver Catálogo
+                <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </span>
+            </Link>
+          </motion.div>
+        </div>
+
+        {/* Features Grid */}
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-[#111] border border-[#333] p-8 rounded-2xl relative overflow-hidden"
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-24"
         >
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#D20000] to-[#FF4500]"></div>
-          <div className="flex items-center gap-4 mb-6">
-            <div className="w-12 h-12 bg-[#D20000]/10 rounded-full flex items-center justify-center">
-              <AlertTriangle className="w-6 h-6 text-[#D20000]" />
-            </div>
-            <h2 className="font-display font-bold italic text-2xl uppercase">Cambios y Devoluciones</h2>
-          </div>
-          <div className="space-y-4 text-gray-300">
-            <p>
-              Queremos que estés 100% conforme con tu compra. Si necesitas realizar un cambio o devolución, tenés un plazo máximo de <strong>48 horas</strong> desde el momento en que recibís el producto.
-            </p>
-            <ul className="list-disc list-inside space-y-2 ml-4 text-gray-400">
-              <li>El producto debe estar en su empaque original, sin uso y en perfectas condiciones.</li>
-              <li>Los costos de envío por devoluciones (salvo error nuestro) corren por cuenta del comprador.</li>
-            </ul>
-            
-            <div className="mt-6 bg-red-950/30 border border-red-900/50 p-4 rounded-lg flex items-start gap-3">
-              <ShieldAlert className="w-6 h-6 text-red-500 shrink-0" />
-              <div>
-                <h3 className="font-bold text-red-400 mb-1">ATENCIÓN: Productos Eléctricos y Electrónicos</h3>
-                <p className="text-sm text-red-200/80">
-                  Los productos electrónicos y eléctricos <strong>NO TIENEN CAMBIO NI DEVOLUCIÓN</strong> bajo ninguna circunstancia. Todos estos componentes son testeados rigurosamente de fábrica antes de ser despachados para garantizar su correcto funcionamiento.
-                </p>
+          {[
+            { icon: Zap, title: "Estándar y Competición", desc: "Amplia variedad para el uso diario o para la pista." },
+            { icon: Truck, title: "Si no está, lo traemos", desc: "Conseguimos lo que tu moto necesita en tiempo récord." },
+            { icon: Wrench, title: "Crecimiento Acelerado", desc: "Hace 8 meses abrimos y ya somos tu parada obligada." }
+          ].map((feature, idx) => (
+            <div key={idx} className="bg-[#111] border border-[#333] p-6 skew-x-12 hover:border-[#FF4500]/50 transition-colors group hover:-translate-y-2 duration-300">
+              <div className="unskew-x-12">
+                <feature.icon className="w-8 h-8 text-[#FF4500] mb-4 group-hover:scale-110 transition-transform" />
+                <h3 className="font-display font-bold italic text-xl mb-2 uppercase">{feature.title}</h3>
+                <p className="text-gray-400 text-sm">{feature.desc}</p>
               </div>
             </div>
-          </div>
-        </motion.section>
+          ))}
+        </motion.div>
       </div>
-    </div>
+    </section>
   );
-}
-
-function ZapIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-    </svg>
-  )
 }

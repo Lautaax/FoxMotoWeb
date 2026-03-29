@@ -2,13 +2,45 @@ import express from "express";
 import { createServer as createViteServer } from "vite";
 import puppeteer from "puppeteer";
 import path from "path";
+import { db } from "./src/firebase";
+import { collection, doc, setDoc, getDocs, writeBatch, serverTimestamp } from "firebase/firestore";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+enum OperationType {
+  CREATE = 'create',
+  UPDATE = 'update',
+  DELETE = 'delete',
+  LIST = 'list',
+  GET = 'get',
+  WRITE = 'write',
+}
+
+function handleFirestoreError(error: unknown, operationType: OperationType, path: string | null) {
+  const errInfo = {
+    error: error instanceof Error ? error.message : String(error),
+    operationType,
+    path
+  };
+  console.error('Firestore Error: ', JSON.stringify(errInfo));
+  // We don't throw here to avoid crashing the scraper, but we log it
+}
+
 let cachedProducts: any[] = [];
 let isScraping = false;
 let scrapeProgress = { current_page: 0, total_products: 0, status: 'idle' };
+
+async function updateScrapeStatus(status: any) {
+  try {
+    await setDoc(doc(db, 'status', 'current'), {
+      ...status,
+      last_run: serverTimestamp()
+    });
+  } catch (error) {
+    handleFirestoreError(error, OperationType.WRITE, 'status/current');
+  }
+}
 
 async function scrapeAllPages() {
   if (isScraping) return;
@@ -16,6 +48,7 @@ async function scrapeAllPages() {
   scrapeProgress.status = 'syncing';
   scrapeProgress.current_page = 1;
   console.log("Starting full catalog scrape...");
+  await updateScrapeStatus(scrapeProgress);
   
   const browser = await puppeteer.launch({
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
@@ -89,6 +122,26 @@ async function scrapeAllPages() {
       cachedProducts = uniqueProducts;
       scrapeProgress.total_products = cachedProducts.length;
       
+      // Save to Firestore in batches
+      try {
+        const batch = writeBatch(db);
+        pageProducts.forEach((p: any) => {
+          if (p && p.sku) {
+            const productRef = doc(db, 'products', p.sku);
+            batch.set(productRef, {
+              ...p,
+              last_updated: serverTimestamp()
+            });
+          }
+        });
+        await batch.commit();
+        console.log(`Saved ${pageProducts.length} products to Firestore batch.`);
+      } catch (error) {
+        handleFirestoreError(error, OperationType.WRITE, 'products');
+      }
+
+      await updateScrapeStatus(scrapeProgress);
+      
       currentPage++;
       
       // Safety limit to avoid infinite loops
@@ -97,9 +150,11 @@ async function scrapeAllPages() {
     
     console.log(`Finished scraping. Total products: ${cachedProducts.length}`);
     scrapeProgress.status = 'idle';
+    await updateScrapeStatus(scrapeProgress);
   } catch (err) {
     console.error("Error scraping products:", err);
     scrapeProgress.status = 'error';
+    await updateScrapeStatus(scrapeProgress);
   } finally {
     await browser.close();
     isScraping = false;

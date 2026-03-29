@@ -1,8 +1,5 @@
-node_modules/
-build/
-dist/
-coverage/
-.DS_Store
-*.log
-.env*
-!.env.example
+{
+  "name": "Fox Motorepuestos",
+  "description": "Landing page de alto rendimiento para Fox Motorepuestos con catálogo integrado.",
+  "requestFramePermissions": []
+}
